@@ -1,0 +1,10 @@
+bench
+solution
+cases
+.obj
+report/%OUTDIR%
+report/report.aux
+report/report.log
+report/report.out
+venv
+.DS_Store

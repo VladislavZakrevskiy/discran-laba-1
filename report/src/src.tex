@@ -1,0 +1,97 @@
+\section{Исходный код}
+
+Программа реализует сортировку подсчетом для пар \enquote{ключ-значение}, где ключ — 32-битное беззнаковое целое число, а значение — 64-битное беззнаковое целое число.
+
+Основная идея алгоритма: для каждого ключа подсчитывается количество элементов с таким ключом, затем вычисляются позиции элементов в отсортированном массиве путем накопления сумм счетчиков. Элементы размещаются в выходном массиве согласно вычисленным позициям.
+
+Т.к код не помещается на одну страницу, приведена таблица с описанием функций и классов:
+
+\begin{longtable}{|p{7.5cm}|p{7.5cm}|}
+\hline
+\rowcolor{lightgray}
+\multicolumn{2}{|c|}{contest.hpp}\\
+\hline
+\texttt{template <typename T> class TVector} & Класс динамического массива с методами \texttt{PushBack}, \texttt{Reserve}, \texttt{Size}, \texttt{Empty}, операторами индексирования и итераторами\\
+\hline
+\texttt{TVector(size\_t count, const T \&value)} & Конструктор, создающий вектор из \texttt{count} элементов со значением \texttt{value}\\
+\hline
+\texttt{void Reserve(size\_t newCapacity)} & Резервирование памяти для \texttt{newCapacity} элементов\\
+\hline
+\texttt{void PushBack(const T \&value)} & Добавление элемента в конец вектора\\
+\hline
+\texttt{void CountingSort(TVector<TElement> \&arr)} & Функция сортировки подсчетом. Находит минимум и максимум ключей, создает массив счетчиков, подсчитывает элементы, вычисляет позиции и размещает элементы в отсортированном порядке\\
+\hline
+\texttt{bool CompareById(const TElement \&left, const TElement \&right)} & Функция сравнения элементов по полю \texttt{id}\\
+\hline
+\rowcolor{lightgray}
+\multicolumn{2}{|c|}{contest\_main.cpp}\\
+\hline
+\texttt{int main()} & Считывает пары ключ-значение из стандартного ввода с помощью \texttt{scanf}, вызывает сортировку, выводит отсортированные данные с помощью \texttt{printf}\\
+\hline
+\end{longtable}
+
+Структура для хранения элементов:
+\begin{lstlisting}[language=C++]
+struct TElement {
+    uint32_t id;
+    uint64_t value;
+};
+\end{lstlisting}
+
+Объявление класса TVector (без реализации методов):
+\begin{lstlisting}[language=C++]
+template <typename T> 
+class TVector {
+  public:
+    TVector() = default;
+    TVector(size_t count, const T &value);
+    TVector(const TVector &other);
+    TVector(TVector &&other) noexcept;
+    TVector &operator=(const TVector &other);
+    TVector &operator=(TVector &&other) noexcept;
+    ~TVector();
+    
+    void PushBack(const T &value);
+    void PushBack(T &&value);
+    void Reserve(size_t newCapacity);
+    size_t Size() const;
+    size_t Capacity() const;
+    bool Empty() const;
+    T &operator[](size_t index);
+    const T &operator[](size_t index) const;
+    T *Begin();
+    const T *Begin() const;
+    T *End();
+    const T *End() const;
+    void Swap(TVector &other) noexcept;
+    
+  private:
+    std::allocator<T> allocator_;
+    T *data_ = nullptr;
+    size_t size_ = 0;
+    size_t capacity_ = 0;
+};
+\end{lstlisting}
+
+\pagebreak
+
+\section{Консоль}
+\begin{alltt}
+$ make
+g++ .obj/contest_main.o -o solution
+
+$ ./solution < cases/5.txt
+019383	3546839058697536693
+205057	16563277856680048351
+219581	8725518293060573749
+526830	3189070866999033975
+690718	11796781922971975819
+
+$ cat cases/5.txt
+690718	11796781922971975819
+219581	8725518293060573749
+205057	16563277856680048351
+526830	3189070866999033975
+019383	3546839058697536693
+\end{alltt}
+\pagebreak
