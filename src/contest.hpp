@@ -189,10 +189,17 @@ void CountingSort(TVector<TElement> &arr) {
         return;
     }
 
-    auto minMax = std::minmax_element(arr.Begin(), arr.End(), CompareById);
+    uint32_t min = arr[0].id;
+    uint32_t max = arr[0].id;
+    for (size_t i = 1; i < arr.Size(); i++) {
+        if (arr[i].id < min) {
+            min = arr[i].id;
+        }
+        if (arr[i].id > max) {
+            max = arr[i].id;
+        }
+    }
 
-    uint32_t min = minMax.first->id;
-    uint32_t max = minMax.second->id;
     size_t range = static_cast<size_t>(max - min) + 1;
 
     TVector<uint32_t> count(range, 0);
